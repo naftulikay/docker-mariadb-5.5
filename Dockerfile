@@ -11,14 +11,16 @@ ENV DEBIAN_FRONTEND noninteractive
 # Install MariaDB PPA
 ADD conf/apt/mariadb.list /etc/apt/sources.list.d/mariadb.list
 RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db \
-     && apt-get update -qq \
-     && apt-get install -qqy mariadb-server
+     && apt-get update -q 2 \
+     && apt-get install -q 2 -y mariadb-server
 
 # Install MariaDB Configuration
 #ADD mysql.conf /etc/mysql/my.cnf
 
 # Mount Data Volume
 VOLUME ["/data"]
+VOLUME ["/conf"]
+VOLUME ["/log"]
 
 # Expose TCP Port 3306
 EXPOSE 3306
