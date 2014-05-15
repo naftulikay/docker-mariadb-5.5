@@ -14,18 +14,10 @@ RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a
 
 # Run Initial Setup
 ADD scripts/mariadb-first-run.sh /usr/local/bin/mariadb-first-run
-
-RUN chmod +x /usr/local/bin/mariadb-first-run \
-    && exec /usr/local/bin/mariadb-first-run \
-    && rm /usr/local/bin/mariadb-first-run
-
-# Add Main Startup Script
 ADD scripts/mariadb-startup.sh /usr/local/bin/mariadb
 
-RUN chmod +x /usr/local/bin/mariadb
-
-# Run MariaDB as the 'mysql' User
-USER mysql
+RUN chmod +x /usr/local/bin/mariadb-first-run \
+    /usr/local/bin/mariadb
 
 # Mount Shared Volumes
 VOLUME ["/etc/mysql/"]
