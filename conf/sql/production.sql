@@ -1,5 +1,0 @@
-# delete 
-
-use mysql;
-
-
