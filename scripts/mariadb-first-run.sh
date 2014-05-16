@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# fail on any error
+set -e
+
 # If the user has not defined a specific password they'd prefer to use for the
 # MySQL root account, generate a 32 digit random new password using the following
 # options:
@@ -19,5 +22,12 @@ else
     echo "Using user-defined password for the MySQL root account."
 fi
 
-# set the mysql root password
+# start mysql to be able to run the following SQL
 
+# set the mysql root password
+mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
+
+# stop mysql
+
+# all done
+exit 0
