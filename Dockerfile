@@ -10,7 +10,8 @@ RUN locale-gen en_US.UTF-8
 ADD conf/apt/mariadb.list /etc/apt/sources.list.d/mariadb.list
 RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db \
      && apt-get update -q 2 \
-     && DEBIAN_FRONTEND=noninteractive apt-get install --yes -q 2 mariadb-server sudo pwgen 
+     && DEBIAN_FRONTEND=noninteractive apt-get install --yes -q 2 mariadb-server sudo pwgen \
+            inotify-tools 
 
 # Run Initial Setup
 ADD scripts/mariadb-first-run.sh /usr/local/bin/mariadb-first-run

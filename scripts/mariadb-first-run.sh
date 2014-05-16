@@ -22,12 +22,22 @@ else
     echo "Using user-defined password for the MySQL root account."
 fi
 
-# start mysql to be able to run the following SQL
+# start mysql in background to be able to run the following SQL
+sudo -u mysql mysqld >/dev/null 2>&1 & 
+
+while [[ ! -S /var/run/mysqld/mysqld.sock ]]; do
+    # wait for mysql to start
+    inotifywait -qq -e create /var/run/mysqld/mysqld.sock
+done
 
 # set the mysql root password
 mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
 
 # stop mysql
+killall -w -s SIGTERM mysqld
+
+# all was successful, remove pwgen and inotify-tools
+apt-get remove --yes -q 2 pwgen inotify-tools
 
 # all done
 exit 0
