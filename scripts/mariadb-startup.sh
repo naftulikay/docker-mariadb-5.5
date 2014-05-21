@@ -11,7 +11,7 @@ fi
 # if this is the first run, execute the first run script and then 
 # remove it.
 if [ -f "/usr/local/bin/mariadb-first-run" ]; then
-    exec /usr/local/bin/mariadb-first-run && \
+    /usr/local/bin/mariadb-first-run && \
         rm /usr/local/bin/mariadb-first-run
 fi
 
