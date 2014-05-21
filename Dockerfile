@@ -21,9 +21,10 @@ RUN chmod +x /usr/local/bin/mariadb-first-run \
     /usr/local/bin/mariadb
 
 # Mount Shared Volumes
-VOLUME ["/etc/mysql/"]
-VOLUME ["/var/lib/mysql"]
-VOLUME ["/var/log"]
+VOLUME ["/etc/mysql/"] # configuration files
+VOLUME ["/var/lib/mysql"] # database files
+VOLUME ["/var/run/mysql"] # unix socket
+VOLUME ["/var/log"] # log files
 
 # Expose TCP Port 3306
 EXPOSE 3306
