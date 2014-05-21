@@ -16,8 +16,7 @@ if [ -z "$MYSQL_ROOT_PASSWORD" ]; then
     # log the newly generated MySQL root password to the Docker logs so the user
     # can look it up for initial provisioning of the server
     echo "Generated MySQL Root Password: \"$MYSQL_ROOT_PASSWORD\""
-    echo "For security reasons, please log into MySQL and change this password \
-        immediately."
+    echo "For security reasons, please log into MySQL and change this password immediately."
 else
     echo "Using user-defined password for the MySQL root account."
 fi
@@ -26,8 +25,8 @@ fi
 sudo -u mysql mysqld >/dev/null 2>&1 & 
 
 while [[ ! -S /var/run/mysqld/mysqld.sock ]]; do
-    # wait for mysql to start
-    inotifywait -qq -e create /var/run/mysqld/mysqld.sock
+    # wait for mysql to start, ie, wait for it to bind to the unix socket
+    inotifywait -qq -e create /var/run/mysqld/
 done
 
 # set the mysql root password
@@ -37,7 +36,7 @@ mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
 killall -w -s SIGTERM mysqld
 
 # all was successful, remove pwgen and inotify-tools
-apt-get remove --yes -q 2 pwgen inotify-tools
+apt-get remove --yes -q 2 pwgen inotify-tools >/dev/null 2>&1
 
 # all done
 exit 0

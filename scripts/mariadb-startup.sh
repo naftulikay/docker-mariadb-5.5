@@ -5,7 +5,7 @@ set -e
 
 # if there's no defined timezone, use UTC
 if [ -z "$MYSQL_TIMEZONE" ]; then
-    MYSQL_TIMEZONE="GST-0"
+    MYSQL_TIMEZONE="GMT"
 fi
 
 # if this is the first run, execute the first run script and then 
