@@ -13,6 +13,10 @@ RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a
      && DEBIAN_FRONTEND=noninteractive apt-get install --yes -q 2 mariadb-server sudo pwgen \
             inotify-tools 
 
+# Configure MariaDB to bind to 0.0.0.0, as is required for Docker containers
+RUN sed -i 's:^bind-address\s*=\s127\.0\.0\.1:bind-address = 0.0.0.0:g' \
+    /etc/mysql/my.cnf
+
 # Run Initial Setup
 ADD scripts/mariadb-first-run.sh /usr/local/bin/mariadb-first-run
 ADD scripts/mariadb-startup.sh /usr/local/bin/mariadb
