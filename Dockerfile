@@ -28,6 +28,9 @@ RUN sed -i 's:/var/log/mysql:/log:g' /config/my.cnf
 # Configure MariaDB to store data in /data
 RUN sed -i 's:/var/lib/mysql:/data:g' /config/my.cnf
 
+# Configure MariaDB to load other configuration files in /config/conf.d
+RUN sed -i 's:/etc/mysql/conf\.d/:/config/conf.d/:g' /config/my.cnf
+
 # Run Initial Setup
 ADD scripts/mariadb-first-run.sh /sbin/mariadb-first-run
 ADD scripts/mariadb.sh /etc/service/mariadb/run

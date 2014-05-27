@@ -16,8 +16,5 @@ if [ -f "/sbin/mariadb-first-run" ]; then
     echo "Done"
 fi
 
-echo "Starting mysqld"
-
 # startup mariadb as user 'mysql' with the given timezone
-/sbin/setuser mysql mysqld --default-time-zone="$MYSQL_TIMEZONE" \
-    --defaults-file=/config/my.cnf
+setuser mysql mysqld --defaults-file=/config/my.cnf

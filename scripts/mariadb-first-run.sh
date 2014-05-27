@@ -22,13 +22,17 @@ else
 fi
 
 # start mysql in background to be able to run the following SQL
-mysqld >/dev/null 2>&1 & 
+echo "starting mysqld..."
+mysqld --defaults-file=/config/my.cnf >/dev/null 2>&1 &
 
+echo "waiting for it to start..."
 while [[ ! -S /var/run/mysqld/mysqld.sock ]]; do
     # wait for mysql to start, ie, wait for it to bind to the unix socket
     inotifywait -qq -e create /var/run/mysqld/
+    echo "bound to socket"
 done
 
+echo "modifying the mysql password"
 # set the mysql root password
 mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
 
@@ -52,8 +56,10 @@ else
 fi
 
 # stop mysql
+echo "killing mysqld"
 killall -w -s SIGTERM mysqld
 
+echo "removing stuff"
 # all was successful, remove pwgen and inotify-tools
 apt-get remove --yes -q 2 pwgen inotify-tools >/dev/null 2>&1
 
