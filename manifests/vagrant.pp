@@ -14,4 +14,6 @@ node 'vagrant-precise64' {
     package { 'lxc-docker':
         require => [Apt::Source["docker"]]
     }
+
+    package { 'mysql-client': }
 }
