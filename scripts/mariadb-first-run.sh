@@ -22,7 +22,7 @@ else
 fi
 
 # start mysql in background to be able to run the following SQL
-sudo -u mysql mysqld >/dev/null 2>&1 & 
+mysqld >/dev/null 2>&1 & 
 
 while [[ ! -S /var/run/mysqld/mysqld.sock ]]; do
     # wait for mysql to start, ie, wait for it to bind to the unix socket

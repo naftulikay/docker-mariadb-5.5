@@ -30,9 +30,9 @@ RUN sed -i 's:/var/lib/mysql:/data:g' /config/my.cnf
 
 # Run Initial Setup
 ADD scripts/mariadb-first-run.sh /sbin/mariadb-first-run
-ADD scripts/mariadb.sh /etc/service/mariadb/run/
+ADD scripts/mariadb.sh /etc/service/mariadb/run
 
-RUN chmod +x /sbin/mariadb-first-run
+RUN chmod +x /sbin/mariadb-first-run /etc/service/mariadb/run
 
 # Mount Shared Volumes
 VOLUME ["/config", "/data", "/log"]
