@@ -15,14 +15,14 @@ if [ -z "$MYSQL_ROOT_PASSWORD" ]; then
     export MYSQL_ROOT_PASSWORD="$(pwgen -snBc 32 1)"
     # log the newly generated MySQL root password to the Docker logs so the user
     # can look it up for initial provisioning of the server
-    echo "Generated MySQL Root Password: \"$MYSQL_ROOT_PASSWORD\""
+    echo "Generated MySQL Root Password: \"$MYSQL_ROOT_PASSWORD\"."
     echo "For security reasons, please log into MySQL and change this password immediately."
 else
     echo "Using user-defined password for the MySQL root account."
 fi
 
 # start mysql in background to be able to run the following SQL
-sudo -u mysql mysqld >/dev/null 2>&1 & 
+mysqld --defaults-file=/config/my.cnf >/dev/null 2>&1 &
 
 while [[ ! -S /var/run/mysqld/mysqld.sock ]]; do
     # wait for mysql to start, ie, wait for it to bind to the unix socket
