@@ -16,7 +16,7 @@ RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a
             inotify-tools
 
 RUN mv /var/lib/mysql /data
-RUN mv /var/log/mysql /log
+RUN mkdir /log && chown mysql:adm /log && rm -fr /var/log/mysql
 RUN mv /etc/mysql /config
 
 # Configure MariaDB to bind to 0.0.0.0, as is required for Docker containers
