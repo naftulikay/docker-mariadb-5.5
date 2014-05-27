@@ -15,24 +15,20 @@ if [ -z "$MYSQL_ROOT_PASSWORD" ]; then
     export MYSQL_ROOT_PASSWORD="$(pwgen -snBc 32 1)"
     # log the newly generated MySQL root password to the Docker logs so the user
     # can look it up for initial provisioning of the server
-    echo "Generated MySQL Root Password: \"$MYSQL_ROOT_PASSWORD\""
+    echo "Generated MySQL Root Password: \"$MYSQL_ROOT_PASSWORD\"."
     echo "For security reasons, please log into MySQL and change this password immediately."
 else
     echo "Using user-defined password for the MySQL root account."
 fi
 
 # start mysql in background to be able to run the following SQL
-echo "starting mysqld..."
 mysqld --defaults-file=/config/my.cnf >/dev/null 2>&1 &
 
-echo "waiting for it to start..."
 while [[ ! -S /var/run/mysqld/mysqld.sock ]]; do
     # wait for mysql to start, ie, wait for it to bind to the unix socket
     inotifywait -qq -e create /var/run/mysqld/
-    echo "bound to socket"
 done
 
-echo "modifying the mysql password"
 # set the mysql root password
 mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
 
@@ -56,10 +52,8 @@ else
 fi
 
 # stop mysql
-echo "killing mysqld"
 killall -w -s SIGTERM mysqld
 
-echo "removing stuff"
 # all was successful, remove pwgen and inotify-tools
 apt-get remove --yes -q 2 pwgen inotify-tools >/dev/null 2>&1
 
