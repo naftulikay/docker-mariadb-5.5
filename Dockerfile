@@ -31,6 +31,11 @@ RUN sed -i 's:/var/lib/mysql:/data:g' /config/my.cnf
 # Configure MariaDB to load other configuration files in /config/conf.d
 RUN sed -i 's:/etc/mysql/conf\.d/:/config/conf.d/:g' /config/my.cnf
 
+# Everything in UTF-8 by default
+RUN sed -i -e 's:^#\s*default-character-set.*$:default-character-set = utf8:g' \
+    -e 's:^#character\([-_]\)set[-_]server.*$:character\1set\1server = utf8:g' \
+    -e 's:^#collation\([-_]\)server.*$:collation\1server = utf8_general_ci:g' /config/conf.d/mariadb.cnf
+
 # Run Initial Setup
 ADD scripts/mariadb-first-run.sh /sbin/mariadb-first-run
 ADD scripts/mariadb.sh /etc/service/mariadb/run
