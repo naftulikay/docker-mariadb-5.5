@@ -1,6 +1,8 @@
 FROM phusion/baseimage:0.9.10
 MAINTAINER Naftuli Tzvi Kay <rfkrocktk@gmail.com>
 
+# The Docker build runs as root, so $HOME should be set to /root
+ENV HOME /root
 # Ensure everything is UTF-8, because there's no reason in the world why not.
 ENV LANG en_US.UTF-8
 #ENV LC_ALL en_US.UTF-8 # gives a warning to stderr :( 
@@ -21,10 +23,10 @@ RUN mv /etc/mysql /config
 RUN sed -i 's:^bind-address\s*=\s127\.0\.0\.1:bind-address = 0.0.0.0:g' /config/my.cnf
 
 # Configure MariaDB to log to /log
-RUN sed -i 's:/var/log/mysql:/log:g' /etc/mysql/my.cnf
+RUN sed -i 's:/var/log/mysql:/log:g' /config/my.cnf
 
 # Configure MariaDB to store data in /data
-RUN sed -i 's:/var/lib/mysql:/data:g' /etc/mysql/my.cnf
+RUN sed -i 's:/var/lib/mysql:/data:g' /config/my.cnf
 
 # Run Initial Setup
 ADD scripts/mariadb-first-run.sh /sbin/mariadb-first-run
