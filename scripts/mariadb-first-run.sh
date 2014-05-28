@@ -15,11 +15,19 @@ if [ -z "$MYSQL_ROOT_PASSWORD" ]; then
     export MYSQL_ROOT_PASSWORD="$(pwgen -snBc 32 1)"
     # log the newly generated MySQL root password to the Docker logs so the user
     # can look it up for initial provisioning of the server
-    echo "Generated MySQL Root Password: \"$MYSQL_ROOT_PASSWORD\"."
-    echo "For security reasons, please log into MySQL and change this password immediately."
+    echo "Generated MySQL Root Password: \"$MYSQL_ROOT_PASSWORD\"." >&2
+    echo "For security reasons, please log into MySQL and change this password immediately." >&2
 else
     echo "Using user-defined password for the MySQL root account."
 fi
+
+# If the user has not defined MYSQL_SECURE_ROOT, then ouput a warning log now.
+if [ -z "$MYSQL_SECURE_ROOT" ]; then 
+    echo "Allowing remote access to the MySQL root account." >&2
+    echo "Provision your MySQL users, then remove external login to the root account to ensure optimal security." >&2
+fi
+
+
 
 # start mysql in background to be able to run the following SQL
 mysqld --defaults-file=/config/my.cnf >/dev/null 2>&1 &
@@ -37,10 +45,7 @@ mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
 # then the root account will only have access from the local Docker container. for
 # most people, this will be annoying, but some people accept this and would rather
 # provision MySQL users from within the Docker container. to each his own.
-if [ -z "$MYSQL_SECURE_ROOT" ]; then
-    echo "Allowing remote access to the MySQL root account."
-    echo "Provision your MySQL users, then remove external login to the root account to ensure optimal security."
-    
+if [ -z "$MYSQL_SECURE_ROOT" ]; then    
     echo 'update user set Host = "%" where User = "root" limit 1;' | mysql -u root \
         --password="$MYSQL_ROOT_PASSWORD" mysql
 
